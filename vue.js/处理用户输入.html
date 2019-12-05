@@ -1,0 +1,36 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <div id="app-5">
+            <p>{{ message }}</p>
+            <button v-on:click="reverseMessage">反转消息</button>
+        </div>
+        <script>
+            var app5 = new Vue({
+                el:"#app-5",
+                data:{
+                    message:"Hello vue.js!"
+                },
+                methods:{
+                    reverseMessage:function(){
+                        this.message = this.message.split("").reverse().join("")
+                    }
+                }
+            })
+        </script>
+
+<!-- v-model 指令，实现表单输入和应用状态之间的双向绑定 -->
+        <div id="app-6">
+            <p>{{message}}</p>
+            <input type="text" v-model="message">
+        </div>
+        <script>
+            var app6 = new Vue({
+                el:"#app-6",
+                data:{
+                    message:"Hello Vue!"
+                }
+            })
+        </script>
+    </body>
+</html>

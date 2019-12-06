@@ -32,5 +32,33 @@
                 }
             })
         </script>
+
+        <div id="app-7">
+            <ol>
+                <todo-item
+                    v-for="item in groceryList"
+                    v-bind:todo="item"
+                    v-bind:kry="item.id"></todo-item>
+            </ol>
+        </div>
+        <script>
+            Vue.component('todo-item',{
+                props:['todo'],
+                template:"<li>{{ todo.text }}</li>"
+            })
+
+            var app7 = new Vue({
+                el:"#app-7",
+                data:{
+                    groceryList:[
+                        {id : 0,text:"111"},
+                        {id : 1,text:"222"},
+                        {id : 2,text:"333"},
+
+
+                    ]
+                }
+            })
+        </script>
     </body>
 </html>

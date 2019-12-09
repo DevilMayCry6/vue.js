@@ -1,0 +1,31 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <div id="app">
+            <p v-if="seen">能看到</p>
+            <a v-bind:href="url">链接</a>
+            <div @click="click1">
+                <div @click.stop="click2">
+                    click me
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var vm=new Vue({
+            el:"#app",
+            data:{
+                seen:true,
+                url:"htp://www.4399.com"
+            },
+            methods:{
+                click1:function(){
+                    console.log('click1..')
+                },
+                click2:function(){
+                    console.log('click2..')
+                }
+            }
+        })
+    </script>
+</html>

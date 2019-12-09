@@ -1,0 +1,32 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <div id="app">
+            {{ msg }}
+            <p>Using mustaches:{{ rawHtml }}</p>
+            <p v-html="rawHtml"></p>
+            <div v-bind:class="color">test...</div>
+            <p>{{ number + 1}}</p>
+            <p>{{ 1 == 1 ? 'Yes' : 'No' }}</p>
+            <p>{{ message.split('').reverse().join('') }}</p>
+        </div>
+        <script>
+            var vm = new Vue({
+                el:"#app",
+                data:{
+                    msg:'hi Vue',
+                    rawHtml:'<span style="color:red">this us should red</span>',
+                    color:"blue",
+                    number:10,
+                    ok: 1,
+                    message:"vue"
+                }
+            });
+            vm.msg = 'hi....';
+        </script>
+        <style>
+            .red{color:red;}
+            .blue{color:blue;font-size: 50px;}
+        </style>
+    </body>
+</html>

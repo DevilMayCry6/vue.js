@@ -24,22 +24,21 @@
                         //`this`指向 vm 实例
                         return this.message.split('').reverse().join("")
                     },
-                    computed:{
-                        now:function(){
-                            return Date.now()
-                        },
+                    
+                    now:function(){
+                        return Date.now()
+                    },
 
-                        fullName:{
-                            //getter
-                            get:function(){
-                                return this.firstName + ' ' + this.lastName
-                            },
-                            //setter
-                            set:function(newValue){
-                                var names = newValue.split(' ')
-                                this.firstName = names[0]
-                                this.lastName = names[names.length -1]
-                            }
+                    fullName:{
+                        //getter
+                        get:function(){
+                            return this.firstName + ' ' + this.lastName
+                        },
+                        //setter
+                        set:function(newValue){
+                            var names = newValue.split(' ')
+                            this.firstName = names[0]
+                            this.lastName = names[names.length -1]
                         }
                     },
 

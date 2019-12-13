@@ -1,0 +1,34 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <div>
+            <h1 v-if="awesome">Vue is awesom!</h1>
+            <h1 v-else>Oh no</h1>
+        </div>
+        <div id="app">
+            <div v-if="type === 'A'">
+                A
+            </div>
+            <div v-else-if="type === 'B'">
+                B
+            </div>
+            <div v-else-if="type === 'C'">
+                C
+            </div>
+            <div v-else>
+                Not A/B/C
+            </div>
+            <h1 v-show="ok">Hello!</h1>
+        </div>
+        
+        <script>
+            var vm = new Vue({
+                el:"#app",
+                data:{
+                    type:"B",
+                    ok:true
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        
+        <div id="app">
+            <button v-on:click="counter += 1">数值 ：{{ counter }}</button><br>
+            <button v-on:dblclick="greet('abc',$event)">Greet</button>
+        </div>
+        <script>
+            var vm=new Vue({
+                el:"#app",
+                data:{
+                    counter:0,
+                    name:"vue"
+                },
+                methods:{
+                    greet:function(str,e){
+                        alert(str);
+                        console.log(e)
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

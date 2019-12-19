@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <div id="app">
+            <button-counter></button-counter>
+            <test></test>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        
+        <script>
+            Vue.component('button-counter',{
+                props:['title'],
+                data:function(){
+                    return {}
+                },
+                template:'<div><h1>h1..</h1></div>',
+                methods:{
+
+                }
+            })
+            var vm = new Vue({
+                el:"#app",
+                data:{
+
+                },
+                methods:{
+                    clicknow:function(e){
+                        console.log(e);
+                    }
+                },
+                components:{
+                    test:{
+                        template:'<h2>h2..</h2>'
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

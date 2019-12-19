@@ -1,0 +1,40 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        
+        <div id="app">
+            <button-counter title="title1: "@ckicknow='clicknow'>
+                <h2>This is H2</h2>
+            </button-counter>
+            <button-counter title="title2 : ">这里的变化 <h1>11</h1></button-counter>
+        </div>
+        <script>
+            Vue.component('button-counter',{
+                props:['title'],
+                data:function(){
+                    return{
+                        count:0
+                    }
+                },
+                template:'<div><h1>h1..</h1><button v-on:click="clickfun">{{ title }} 1 {{ count }} times.</button><slot></slot></div>',
+                methods:{
+                    clickfun:function(){
+                        this.count ++;
+                        this.$emit('clicknow',this.count);
+                    }
+                }
+            })
+            var vm = new Vue({
+                el:"#app",
+                data:{
+
+                },
+                methods:{
+                    clicknow:function(e){
+                        console.log(e)
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

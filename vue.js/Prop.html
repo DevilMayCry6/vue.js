@@ -1,0 +1,210 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        
+        <!-- 在html 中是 kebab-case 的 -->
+        <blog-post post-title="hello!"></blog-post>
+
+        <!-- 给 prop 传入一个静态的值 -->
+        <blog-post title="我的 Vue 之旅"></blog-post>
+
+
+    <!-- prop 可以通过 v-bind 动态赋值 -->
+        <!-- 动态赋予一个变量的值 -->
+        <blog-post v-bind:title="post.title"></blog-post>
+        <!-- 动态赋予一个复杂表达式的值 -->
+        <blog-post
+            v-bind:title="post.title + 'by' + post.author.name"
+        ></blog-post>
+
+        
+    <!-- 传入一个数字 -->
+        <!-- 即便 `42` 是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+        <!-- 这是一个 JavaScript 表达式而不是一个字符串 -->
+        <blog-post v-bind:likes="42"></blog-post>
+
+        <!-- 用一个变量进行动态赋值 -->
+        <blog-post v-bind:likes="post.likes"></blog-post>
+
+        
+    <!-- 传入一个布尔值 -->
+        <!-- 包含该 prop 没有值的情况在内，都意味着`true` -->
+        <blog-post is-published></blog-post>
+
+        <!-- 即便`false` 是静态的，我们任然需要 `b-bind` 来告诉 Vue -->
+        <!-- 这是一个 JavaScript 表达式而不是一个字符串 -->
+        <blog-post v-bind:is-published="false"></blog-post>
+
+        <!-- 用一个变量进行动态赋值 -->
+        <blog-post v-bind:is-published="post.isPublished"></blog-post>
+
+
+    <!-- 传入一个数组 -->
+        <!-- 即便数组是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+        <!-- 这是一个 JavaScript 表达式而不是一个字符串 -->
+        <blog-post v-bind:comment-ids="[234,266,273]"></blog-post>
+
+        <!-- 用一个变量进行动态赋值 -->
+        <blog-post v-bind:comment-ids="post.commentIds"></blog-post>
+
+    <!-- 传入一个对象 -->
+        <!-- 即便对象是静态的，我们仍然需要`v-bind` 来告诉Vue-->
+        <!-- 这是一个JavaScript 表达式而不是一个字符串 -->
+        <blog-post 
+            v-bind:author="{
+                name:'Veronica',
+                company:'hh'
+            }"
+        ></blog-post>
+
+        <!-- 用一个变量进行动态赋值 -->
+        <blog-post v-bind:author="post.author"></blog-post>
+
+
+    <!-- 传入一个对象的所有属性 -->
+        <!-- 将一个对象的所有属性都作为prop传入，你可以使用不带参数的 v-bind（取代 v-bind:prop-name） -->
+        <blog-post v-bind="post"></blog-post>
+        <!-- 等价于：
+        <blog-post
+            b-bind:id="post.id"
+            b-bind:title="post.title"
+        ></blog-post> -->
+
+
+        <!-- 非 Prop 的特性 -->
+
+            <bootstrap-date-input data-date-picker="activated"></bootstrap-date-input>
+            <!-- 替换/合并已有的特性 -->
+            <input type="date" class="from-control">
+
+            <bootstrap-date-input
+                data-date-picker="activated"
+                class="date-picker-theme-dark"
+            ></bootstrap-date-input>
+
+        <script>
+            Vue.component('blog-post',{
+                //在JavaScript 中是 camelCase 的
+                template:'<h3>{{ postTitle }} </h3>',
+                props:['postTitle'],
+                props: ['title', 'likes', 'isPublished', 'commentIds', 'author'],
+                props: {
+                    title: String,
+                    likes: Number,
+                    isPublished: Boolean,
+                    commentIds: Array,
+                    author: Object,
+                    callback: Function,
+                    contactsPromise: Promise // or any other constructor
+                },
+                post:{
+                    id:1,
+                    title:'我的Vue 之旅'
+                },
+
+                
+            //单向数据流           不应该在一个子组件内部改变prop
+                // 这个prop 用来传递一个初始值;这个子组件接下来希望将其作为一个本地的prop数据来使用。在这种情况下，最好定义一个本地的 data 属性并将这个 prop 用作其初始值
+                props:['initialCounter'],
+                data:function(){
+                    return{
+                        counter:this.initialCounter
+                    }
+                },
+
+                // 这个prop 以一种原始的值传入且需要进行转换。在这种情况下，最好使用这个prop 的值来定义一个计算属性：
+                props:['size'],
+                computed:{
+                    normalizedSize:function(){
+                        return this.size trim().toLowerCase()
+                    }
+                },
+
+                //为了定制prop 的验证方式，你可以为 props 中的值提供一个带有验证需求的对象，而不是一个字符串数组。例如：
+                props:{
+                    //基础的类型检查('null' 和 'undefined' 回通过任何2类型验证)
+                    propA:Number,
+                    //多个可能的类型
+                    propB:[String.Number],
+                    //必填的字符串
+                    propC:{
+                        type:String,
+                        required:true
+                    },
+                    //带有默认值的数字
+                    propD:{
+                        type:Number,
+                        default:100
+                    },
+                    //带有默认值的对象
+                    propE:{
+                        type:Object,
+                        //对象或数组默认值必须从一个工厂函数获取
+                        default:function(){
+                            return{message:'hello'}
+                        }
+                    },
+                    //自定义验证函数
+                    propF:{
+                        validator:function(value){
+                            //这个值必须匹配下列字符串中的一个
+                            return['success','warning','danger'].indexOf(value) !== -1
+                        }
+                    }
+                    //注意那些prop 会在一个组件实例创建 之前 进行验证，所以实例的属性（如 data、computed 等）在 default 或 validator 函数中是不可用的
+                },
+
+                //类型检查
+                // type 可以是下列原生构造函数中的一个：
+                //String
+                //Number
+                //Boolean
+                //Array
+                //Object
+                //Date
+                //Function
+                // Symbol
+                    // 额外的，type 还可以是一个自定义的构造函数，并且通过 instanceof 来进行检查确认。例如，给定下列现成的构造函数
+                    // function Person(firstName,lastName){
+                    //     this.firstName = firstName
+                    //     this.lastName = lastName
+                    // }
+                    //可以使用：
+                    // Vue.component('blog-post',{
+                    //     props:{
+                    //         author:Person
+                    //     }
+                    // })
+                    //来验证 author prop 的值是否是通过 new Person 创建的
+
+            // 禁用特性继承
+                // 如果你 不希望 组件的根元素继承特性，你可以在组件的选项中设置 inheritAttrs:false
+                inheritAttrs:false,
+                //..
+
+                //这尤其适合配合实例的 $attrs 属性使用，该属性包含了传递给一个组件的特性名和特性值，例如
+                
+                required:true,
+                placeholder:'Enter your username'
+                
+                // 有了 inheritAttrs: false 和 $attrs ,你就可以手动决定这些特性会被赋值于哪个元素。在撰写 基础组件 的时候是常会用到的
+                inheritAttrs:false,
+                props:['label','value'],
+                template:
+                <label>
+                    {{label}}
+                    <input
+                        v-bind="$attrs"
+                        v-bind:value="vaule"
+                        v-on:input="$emit('input',$event.target.value"
+                        >
+                        </label>
+                        <base-input
+  v-model="username"
+  required
+  placeholder="Enter your username"
+></base-input>
+            })
+        </script>
+    </body>
+</html>

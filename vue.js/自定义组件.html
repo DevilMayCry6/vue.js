@@ -1,0 +1,90 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <body>
+        <!-- 自定义组件的 v-model -->
+        <base-checkbox v-model="lovingVue"></base-checkbox>
+
+
+        <!-- 将原生事件绑定到组件 -->
+        <base-input v-on:focus.native="onFocus"></base-input>
+        <label>
+            {{ label }}
+        <input
+            v-bind="$attrs"
+            v-bind:value="value"
+            v-on:input="$emit('input',$event.target.value)"
+        >
+        </label>
+
+
+        <!-- .sync修饰符 -->
+        <text-document
+            v-bind:title="doc.title"
+            v-on:update:title="doc.title=$event"
+        ></text-document>
+
+        <text-document v-bind:title.sync="doc.title"></text-document>
+
+        <!-- 注意带有 .sync 修饰符的 v-bind 不能和表达式一起使用 （例如 v-bind:title.sync="doc.title + '!' 是无效的）取而代之的是，你只能提供你想要绑定的属性名，类似 v-model -->
+
+        <!-- 当我们用一个对象同时设置多个 prop  的时候，也可以将这个 .sync 修饰符和 v-bind 配合使用-->
+        <text-document v-bind.sync="doc"></text-document>
+        <!-- 这样会 doc 对象中的每一个属性（如 title）都作为一个独立的 prop 传进去，然后各自添加用于更新的 v-on 监听器 -->
+
+        <!-- 将 v-bind.sync 用在一个字面量的对象上，例如 v-bind.sync="{ title:doc.title}",是无法正常工作的，因为在解析一个像这样复杂表达式的时候，有很多边缘情况需要考虑 -->
+    </body>
+    <script>
+        Vue.component('base-checkbox',{
+            model:{
+                prop:'checked',
+                event:'change'
+            },
+            props:{
+                checked:Boolean
+            },
+            template:   `
+                <imput
+                    type="checkbox"
+                    v-bind:checked="checked"
+                    v-on:change="$emit('change',$event.target.checked)"
+                >
+                `
+        })
+
+        // 将原生事件绑定到组件
+        Vue.component('base-input',{
+            inheritAttrs:false,
+            props:['label','value'],
+            computed:{
+                inputListeners:function(){
+                    var vm=this
+                    //`Object.assign` 将所有的对象合并为一个新对象
+                    return Object.assign({},
+                    //我们从父级添加所有的监听器
+                    this.$listeners,
+                    //然后我们添加自定义监听器，
+                    // 或覆写一些监听器的行为
+                    {
+                        // 这里确保组件配合 `v-model` 的工作
+                        input:function(event){
+                            vm.$emit('input',event.target.value)
+                        }
+                    }
+                )
+            }
+        },
+        template: `
+            <label>
+                {{ label }}
+                <input
+                    v-bind="$attrs"
+                    v-bind:value="value"
+                    v-on="inputListeners"
+                >
+            </label>
+            `
+        })
+        this.$emit('update:title',newTitle)
+    </script>
+</html>

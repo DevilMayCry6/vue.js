@@ -1,0 +1,79 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <google-map>
+            <google-map-markers v-bind:places="iceCreamShops"></google-map-markers>
+        </google-map>
+        <google-map>
+            <google-map-region-region v-bind:shape="cityBoundaries">
+                <google-map-markers v-bind:places="iceCreamShops"></google-map-markers>
+            </google-map-region-region>
+        </google-map>
+
+        <!-- 访问父级组件实例 -->
+        <google-map>
+            <google-map-markers v-bind:place="iceCreamShops"></google-map-markers>
+        </google-map>
+        <google-map>
+            <google-map-region v-bind:shape="cityBoundaries">
+                <google-map-markers v-bind:places="iceCreamShops"></google-map-markers>
+            </google-map-region>
+        </google-map>
+
+        <!-- 访问子组件实例或子元素 -->
+        <base-input ref="usernameInput"></base-input>
+        <input ref="input">
+
+
+        <!-- 依赖注入 -->
+        <google-map>
+            <google-map-region v-bind:shape="cityBoundaries">
+                <google-map-markers v-bind:places="iceCreamShops"></google-map-markers>
+            </google-map-region>
+        </google-map>
+        <script>
+            new Vue({
+                data:{
+                    foo:1
+                },
+                computed:{
+                    bar:function(){/*...*/}
+                },
+                methods:{
+                    baz:function(){/*...*/}
+                }
+            })
+
+            // 获取根组件的数据
+            this.$root.foo
+            // 写入根组件的数据
+            this.$root.foo = 2
+            // 访问根组件的技术属性
+            this.$root.bar
+            // 调用根组件的方法
+            this.$root.baz()
+
+
+            var map = this.$parent.map || this.$parent.$parent.map
+
+            this.$refs.usernameInput
+
+            methods:{
+                // 用来从父级组件聚集输入框
+                focus:function(){
+                    this.$refs.input.focus()
+                }
+            }
+
+            this.$refs.usernameInput.focus()
+
+            provide:function(){
+                return{
+                    getMap:this.getMap
+                }
+            }
+
+            inject:['getMap']
+        </script>
+    </body>
+</html>

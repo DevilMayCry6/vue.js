@@ -31,6 +31,17 @@
                 <google-map-markers v-bind:places="iceCreamShops"></google-map-markers>
             </google-map-region>
         </google-map>
+        
+        <p>
+            <span>{{ folder.name }}</span>
+            <tree-folder-contents :children="folder.children"/>
+        </p>
+        <ul>
+            <li v-for="child in children">
+                <tree-folder v-if="child.children" :folder="child"/>
+                <span v-else>{{ child.name }}</span>
+            </li>
+        </ul>
         <script>
             new Vue({
                 data:{
@@ -117,6 +128,18 @@
                         picker.destroy()
                     })
                 }
+            }
+
+            Vue.component('unique-name-of-my-component',{
+                template:'<div><stack-overflow></stack-overflow></div>'
+            })
+
+            beforeCreate:function(){
+                this.$options.components.TreeFolderContents = require('./tree-folder-contents.vue').default
+            }
+            
+            component:{
+                TreeFolderContents:() => import('./tree-folder-contents.vue')
             }
         </script>
     </body>

@@ -42,6 +42,18 @@
                 <span v-else>{{ child.name }}</span>
             </li>
         </ul>
+
+        <!-- 内联模板 -->
+        <my-component inline-template>
+            <div>
+                <p>他们被编译为组件自己的模板</p>
+                <p>非亲属传输内容</p>
+            </div>
+        </my-component>
+        <!-- X-Template -->
+        <script type="text/x-template" id="hello-world-template">
+            <p>Hello HELLO</p>
+        </script>
         <script>
             new Vue({
                 data:{
@@ -141,6 +153,10 @@
             component:{
                 TreeFolderContents:() => import('./tree-folder-contents.vue')
             }
+
+            Vue.component('hello-world',{
+                template:'#hello-world-template'
+            })
         </script>
     </body>
 </html>

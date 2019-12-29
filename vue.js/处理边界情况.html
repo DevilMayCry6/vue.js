@@ -157,6 +157,16 @@
             Vue.component('hello-world',{
                 template:'#hello-world-template'
             })
+            
+
+            // 通过 v-once 创建低开销的静态组件
+            Vue.component('terms-of-service',{
+                template:
+                <div v-once>
+                 <h1>服务条款</h1>
+                 很多静态内容
+                 </div>
+            })
         </script>
     </body>
 </html>

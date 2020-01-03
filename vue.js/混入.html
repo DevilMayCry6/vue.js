@@ -21,6 +21,25 @@
             })
 
             var component = new Component() // =>"hello from mixin!"
+
+
+            // 全局混入
+            // 为自定义的选项 'myOption' 注入一个处理器
+            Vue.mixin({
+                created:function(){
+                    var myOption = this.$options.myOption
+                    if(myOption){
+                        console.log(myOption)
+                    }
+                }
+            })
+
+            new Vue({
+                myOption:'hello'
+            })
+            // => "hello!"
+
+            
         </script>
     </body>
 </html>

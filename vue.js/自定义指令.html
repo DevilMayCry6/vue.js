@@ -1,0 +1,24 @@
+<html>
+    <body>
+        <script>
+            // 注册一个全局自定义指令 'v-focus'
+            Vue.directive('focus',{
+                // 当被绑定的元素插入到 DOM 中时
+                inserted:function(ei){
+                    // 聚焦元素
+                    el.focus()
+                }
+            })
+
+            directive:{
+                focus:{
+                    // 指令的定义
+                    inserted:function(el){
+                        el.focus()
+                    }
+                }
+            }
+        </script>
+        <input v-focus>
+    </body>
+</html>

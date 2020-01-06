@@ -1,5 +1,7 @@
 <html>
     <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
         <script>
             // 注册一个全局自定义指令 'v-focus'
             Vue.directive('focus',{
@@ -10,15 +12,35 @@
                 }
             })
 
-            directive:{
-                focus:{
-                    // 指令的定义
-                    inserted:function(el){
-                        el.focus()
-                    }
-                }
-            }
+            // directive:{
+            //     focus:{
+            //         // 指令的定义
+            //         inserted:function(el){
+            //             el.focus()
+            //         }
+            //     }
+            // }
         </script>
         <input v-focus>
+
+        <script>
+            Vue.component('base-checkbox',{
+                model:{
+                    prop:'checked',
+                    event:'change'
+                },
+                props:{
+                    checked:Boolean
+                },
+                template:`
+                <input
+                    type="checkbox"
+                    v-bind:checked="checked"
+                    v-on:change="$emit('change',$event.target.checked)"
+                >
+                `
+            })
+        </script>
+        <base-checkbox v-model="lovingVue"></base-checkbox>
     </body>
 </html>

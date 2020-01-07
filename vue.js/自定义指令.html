@@ -2,6 +2,25 @@
     <body>
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
+        <base-checkbox v-model="lovingVue"></base-checkbox>
+
+        <div id="hook-argument-example" v-mode:foo.a.b="message"></div>
+
+
+        <!-- 动态指令参数 -->
+        <div id="baseexample">
+            <p>Scroll down the page</p>
+            <p v-pin="200">Stick me 200px from the top of the page 从首页给我200像素</p>
+        </div>
+
+        <div id="dynamicexample">
+            <h3>Scroll down inside this section 在本节向下滚动</h3>
+            <p v-pin:[direction]="200">我被钉在左边200像素的那一页上</p>
+        </div>
+
+
+        <!-- 对象字面量 -->
+        <div v-demo = "{color:'white',text:'hello!'"></div>
         <script>
             // 注册一个全局自定义指令 'v-focus'
             Vue.directive('focus',{
@@ -41,6 +60,73 @@
                 `
             })
         </script>
-        <base-checkbox v-model="lovingVue"></base-checkbox>
+        <script>
+            Vue.directive('demo',{
+                hind:function(el,binding,vnode){
+                    var s =JSON.stringify
+                    el.innerHTML =
+                    'name:' +s (binding.name) + '<br>' +
+                    'value:' + s(binding.value) + '<br>' +
+                    'expression:' + s(binding.expression) + '<br>' +
+                    'argument:' + s(binding.arg) + '<br>' +
+                    'modifiers:' + s(binding.modifiers) + '<br>' +
+                    'vnode keys:' + Object.keys(vnode).join(',')
+                }
+            })
+
+            new Vue({
+                el:"#hook-argument-example",
+                data:{
+                    message:'hello!'
+                }
+            })
+        </script>
+        <script>
+            Vue.directive('pin',{
+                bind:function(el,binding,vnode){
+                    el.style.position = "fixed"
+                    el.style.top = binding.value + 'px'
+                }
+            })
+
+            new Vue({
+                el:"#baseexample",
+                data:function(){
+                    return{
+                        direction:'left'
+                    }
+                }
+            })
+        </script>
+        <script>
+            Vue.directive('pin',{
+                bind:function(el,binding,vonde){
+                    el.style.position ="fixed"
+                    var s = (binding.arg == 'left' ? 'left':'top')
+                    el.style[s] = binding.value + 'px'
+                }
+            })
+
+            new Vue({
+                el:'#dynamicexample',
+                data:function(){
+                    return{
+                        direction:'left'
+                    }
+                }
+            })
+        </script>
+        <script>
+            // 函数简写
+            Vue.directive('color-swatch',function(el,binding){
+                el.style.backgroundColor = binding.value
+            })
+
+            // 对象字面量
+            Vue.directive('demo',function(el,binding){
+                console.log(binding.value.color) // => "white"
+                console.log(binding.value.text) //=> 'hello!'
+            })
+        </script>
     </body>
 </html>

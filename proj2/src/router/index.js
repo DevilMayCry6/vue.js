@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 // import Home from "../views/Home.vue";
 import Proj from "../components/Proj.vue";
+import Zdysj from "../components/Zdysj.vue";
+
 
 Vue.use(VueRouter);
 
@@ -11,10 +13,10 @@ const routes = [
     // name: "home",
     component: Proj
   },
-  // {
-  //   path: "/proj",
-  //   component: Proj
-  // },
+  {
+    path: "/zdysj",
+    component: Zdysj
+  },
   {
     path: "/about",
     name: "about",

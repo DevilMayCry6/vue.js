@@ -1,3 +1,47 @@
+const compileUtil ={
+    getVal(expr,vm){
+        // [person,name]
+        return expr.split('.').reduce((data,currentVal)=>{
+            // console.log(currentVal);
+            return data[currentVal];
+        },vm,$date)
+    },
+    text(node,expr,vm){ //expr:msg 学习MVM原理 //<div v-text = 'person.fav'></div>
+        const value = vm.$data[expr];
+        this.updater.textUpdate(node,value)
+    },
+    html(){
+        if(expr.indexOf('{{') !== -1){
+            // {{personalbar.name}}--{{personalbar.age}}
+            value = expr.replace(/\{\{(.+?)\}\}/g,(...arg)=>{
+                console.log(args);
+            })
+        }else{
+
+        value = this.getVal(expr,vm)
+    }
+        this.updater.htmlUpdater(node,value);
+    },
+    model(node,expr,vm){
+        const value = this.getVal(expr,vm);
+        this.updater.modelUpdater(node,value);
+    },
+    on(node,expr,vm,eventName){
+
+    },
+    // 更新的函数
+    updater:{
+        htmlUpdater(node,value){
+            node.innerHTML = value;
+        },
+        modelUpdater(node,value){
+            node.value = value;
+        },
+        textUpdate(node,value){
+            node.textContent = value;
+        }
+    }
+}
 class Compile{
     constructor(el,vm){
         this.el = this.isElementNode(el) ? el : document.querySelector(el);
@@ -35,12 +79,12 @@ class Compile{
             if(this.isElementNode(child)){
                 // 是元素节点
                 // 编译元素节点
-                console.log('元素节点'.child);
+                // console.log('元素节点'.child);
                 this.compileElement(child);
             }else{
                 // 文本节点
                 // 编译文本节点
-                console.log('文本节点',child);
+                // console.log('文本节点',child);
                 this.compileText(child);
             }
 
@@ -50,10 +94,34 @@ class Compile{
         })
     }
     compileElement(node){
+        //   console.log(node)
+        // <div v-text="msg"></div>
+        const attributes = node.attributes;
+        [...attributes].forEach(attr=>{
+            const{name,value} = attr;
+            console.log(attr);
+            if(this.isDirective(name)){//是一个指令 v-text v-html v-model v-on:click
+                const[,dirctive] = name.split('-'); //text html model on:click
+                const[firName,eventName] = dirctive.split(':');//text html model on
+                // 更新数据 数据驱动视图
+                compileUtil[dirname](node,value,this.vm,eventName)
 
+                // 删除有指令的标签上的属性
+                node.removeAttribute('v-' + dirctive);
+            }
+            
+        })
     }
     compileText(node){
-        
+        // {()} v-text
+        const content = node.textContent;
+
+        if(/\{\{(.+?)\}\}/.test(content)){
+            compileUtil['text'](node,content,this.vm);
+        }
+    }
+    isDirective(attrName){
+        return attrName.startsWith('v-')
     }
     node2Fragment(el){
         // 创建文档碎片

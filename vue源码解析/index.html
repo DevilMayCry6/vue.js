@@ -18,9 +18,10 @@
         <h3>{{msg}}</h3>
         <div v-test = 'msg'></div>
         <div v-test = 'person.fav'></div>
-
         <div v-html = 'htmlStr'></div>
         <input type="text" v-model='msg'>
+        <button v-on:click='handlerClick'>按钮on</button>
+        <button @click='handlerClick'>按钮@</button>
     </div>
     <script src="./Mvue.js"></script>
     <script>
@@ -32,7 +33,13 @@
                     age:0,
                     fav:"Fav"
                 },
-                msg:"学习MVM实现原理"
+                msg:"学习MVM实现原理",
+                htmlStr:'<h3>学的怎么样？</h3>'
+            },
+            methods:{
+                handlerClick(){
+                    console.log(this);
+                }
             }
         })
     </script>

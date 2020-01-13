@@ -7,19 +7,21 @@ const compileUtil ={
         },vm,$date)
     },
     text(node,expr,vm){ //expr:msg 学习MVM原理 //<div v-text = 'person.fav'></div>
-        const value = vm.$data[expr];
-        this.updater.textUpdate(node,value)
-    },
-    html(){
         if(expr.indexOf('{{') !== -1){
             // {{personalbar.name}}--{{personalbar.age}}
             value = expr.replace(/\{\{(.+?)\}\}/g,(...arg)=>{
-                console.log(args);
+                return this.getVal(args[1],vm);
             })
         }else{
 
         value = this.getVal(expr,vm)
     }
+        const value = this.getVal(expr,vm);
+        this.updater.textUpdate(node,value)
+    },
+    html(){
+        let value;
+        let value = this.getVal(expr,vm);
         this.updater.htmlUpdater(node,value);
     },
     model(node,expr,vm){
@@ -27,7 +29,11 @@ const compileUtil ={
         this.updater.modelUpdater(node,value);
     },
     on(node,expr,vm,eventName){
-
+        let fn = vm.$options.methods && vm.$options.methods[expr];
+        node.addEventListener(eventName,fn.bind(vm),false);
+    },
+    bind(node,expr,vm,attrName){
+        // 自己实现
     },
     // 更新的函数
     updater:{
@@ -100,14 +106,17 @@ class Compile{
         [...attributes].forEach(attr=>{
             const{name,value} = attr;
             console.log(attr);
-            if(this.isDirective(name)){//是一个指令 v-text v-html v-model v-on:click
+            if(this.isDirective(name)){//是一个指令 v-text v-html v-model v-on:click v-bind:src
                 const[,dirctive] = name.split('-'); //text html model on:click
-                const[firName,eventName] = dirctive.split(':');//text html model on
+                const[dirName,eventName] = dirctive.split(':');//text html model on
                 // 更新数据 数据驱动视图
                 compileUtil[dirname](node,value,this.vm,eventName)
 
                 // 删除有指令的标签上的属性
                 node.removeAttribute('v-' + dirctive);
+            }else if(this.isEventName(name)){ //@click="handleClick"
+                let [,eventName] = name.split('@');
+                compileUtil['on'](node,value,this.vm,eventName);
             }
             
         })

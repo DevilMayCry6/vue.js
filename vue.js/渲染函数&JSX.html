@@ -1,0 +1,45 @@
+<html>
+    <body>
+        <h1>
+            <a href="#hello-world">
+                Hello World!
+            </a>
+        </h1>
+        <anchored-heading :level="1">Hello World!</anchored-heading>
+        <script type="text/x-template" id="anchored-heading-template">
+            <h1 v-if="level === 1">
+                <slot></slot>
+            </h1>
+            <h2 v-else-if="level === 2">
+                <slot></slot>
+            </h2>
+        </script>
+        <script>
+            Vue.component('anchored-heading',{
+                template:'#anchored-heading-template',
+                props:{
+                    level:{
+                        type:Number,
+                        required:true
+                    }
+                }
+            })
+        </script>
+        <script>
+            Vue.component('anchored-heading',{
+                render:function(createElement){
+                    return createElement(
+                        'h' + this.level, //标签名称
+                        this.$slots.default //子节点数组
+                    )
+                },
+                props:{
+                    level:{
+                        type:Number,
+                        required:true
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<html>
+    <body>
+        <script>
+            var EmptyList ={/*...*/}
+            var TableList = {/*...*/}
+            var OrderedList = {/*...*/}
+            var UnorderedList = {/*...*/}
+
+            Vue.component('smart-list',{
+                functional:true,
+                props:{
+                    items:{
+                        type:Array,
+                        required:true
+                    },
+                    isOrdered:Boolean
+                },
+                render:function(createElement,context){
+                    function appropriateListComponent(){
+                        var items = context.props.items
+
+                        if(items.length === 0) return EmptyList
+                        if(typeof items[0]=== 'object') return TableList
+                        if(context.props.isOrdered) return OrderedList
+
+                        return UnorderedList
+                    }
+
+                    return createElement(
+                        appropriateListComponent(),
+                        context.data,
+                        context.children
+                    )
+                }
+            })
+        </script>
+        <script>
+            Vue.component('my-functional-button',{
+                functional:true,
+                render:function(createElement,context){
+                    // 完全透传任何特性、事件监听器、子节点等
+                    return createElement('button',context.data,context.children)
+                }
+            })
+        </script>
+        <template functional>
+            <button 
+                class='btn btn-primary'
+                v-bind="data.attrs"
+                v-on:listeners
+            >
+                <slot></slot>
+            </button>
+        </template>
+    </body>
+</html>

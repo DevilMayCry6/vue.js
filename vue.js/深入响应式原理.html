@@ -1,0 +1,49 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+        <div id="example">
+            {{message}}
+        </div>
+    </body>
+    <script>
+        var vm = new Vue({
+            el:"#example",
+            data:{
+                message:'123'
+            }
+        })
+        vm.message = 'new message' //更改数据
+        vm.$el.textContext === 'new message' //false
+        Vue.nextTick(function(){
+            vm.$el.textContext === 'new message' //true
+        })
+
+        Vue.component('example',{
+            template:'<span>{{ message }}</span>',
+            data:function(){
+                return{
+                    message:'未更新'
+                }
+            },
+            methods:{
+                updateMessage:function(){
+                    this.message ='已更新'
+                    console.log(this.$el.textContext) // =>'未更新'
+                    this.$nextTick(function(){
+                        console.log(this.$el.textContext) //=> '已更新'
+                    })
+                }
+            }
+        })
+
+        methods:{
+            updateMessage:async function(){
+                this.message='已更新'
+                console.log(this.$el.textContext) //=> '未更新'
+                await this.$nextTick()
+                console.log(this.$el.textContext) //=> '已更新'
+            }
+        }
+    </script>
+</html>
